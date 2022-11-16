@@ -4,7 +4,7 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { createLogger } from '../utils/logger'
 import { TodoItem } from '../models/TodoItem'
 import { TodoUpdate } from '../models/TodoUpdate'
-import { Types } from 'aws-sdk/clients/s3'
+
 const XAWS = AWSXRay.captureAWS(AWS)
 
 const logger = createLogger('TodosAccess')
@@ -12,9 +12,8 @@ const logger = createLogger('TodosAccess')
 // TODO: Implement the dataLayer logic
 class TodoAccess {
   dynamoClient: DocumentClient = new AWS.DynamoDB.DocumentClient()
-  s3Client: Types = new AWS.S3({ signatureVersion: 'v4' })
+  
   todoTable = process.env.TODOS_TABLE
-  s3BucketName = process.env.S3_BUCKET_NAME
 
   async create(body: TodoItem) {
     try {
@@ -44,6 +43,46 @@ class TodoAccess {
     const { Items } = await this.dynamoClient.query(params).promise()
 
     return Items
+  }
+
+  async update(body: TodoUpdate, todoId: string, userId: string) {
+    const params = {
+      TableName: this.todoTable,
+      Key: {
+        userId: userId,
+        todoId: todoId
+      },
+      UpdateExpression: 'set #a = :a, #b = :b, #c = :c',
+      ExpressionAttributeNames: {
+        '#a': 'name',
+        '#b': 'dueDate',
+        '#c': 'done'
+      },
+      ExpressionAttributeValues: {
+        ':a': body['name'],
+        ':b': body['dueDate'],
+        ':c': body['done']
+      },
+      ReturnValues: 'ALL_NEW'
+    }
+
+    const { Attributes } = await this.dynamoClient.update(params).promise()
+
+    return Attributes
+  }
+
+  async delete(todoId: string, userId: string) {
+    const params = {
+      TableName: this.todoTable,
+      Key: {
+        userId: userId,
+        todoId: todoId
+      }
+    }
+
+    await this.dynamoClient.delete(params).promise()
+
+    return ''
   }
 }
 

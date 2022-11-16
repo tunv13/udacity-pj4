@@ -1,5 +1,5 @@
 import TodosAccess from './todosAcess'
-import { AttachmentUtils } from './attachmentUtils'
+import { generateUploadUrl as generateUploadUrlAttachmentUtils } from './attachmentUtils'
 import { TodoItem } from '../models/TodoItem'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
@@ -12,6 +12,11 @@ const uuidv4 = require('uuid/v4')
 const getTodo = (token: string) => {
   const userId = parseUserId(token)
   return TodosAccess.getAll(userId)
+}
+
+const updateTodo = (body: UpdateTodoRequest, id: string, token: string) => {
+  const userId = parseUserId(token)
+  return TodosAccess.update(body, id, userId)
 }
 
 const createTodo = (body: CreateTodoRequest, token: string) => {
@@ -28,4 +33,13 @@ const createTodo = (body: CreateTodoRequest, token: string) => {
     ...body
   })
 }
-export { createTodo, getTodo }
+
+const deleteToDo = (todoId: string, jwtToken: string) => {
+  const userId = parseUserId(jwtToken)
+  return TodosAccess.delete(todoId, userId)
+}
+
+const generateUploadUrl = (todoId: string) => {
+  return generateUploadUrlAttachmentUtils(todoId)
+}
+export { createTodo, getTodo, updateTodo, deleteToDo, generateUploadUrl }

@@ -20,6 +20,10 @@ export const handler = middy(
     } catch (error) {
       return {
         statusCode:400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
         body: JSON.stringify(error)
       }
     }
