@@ -20,7 +20,7 @@ const updateTodo = (body: UpdateTodoRequest, id: string, token: string) => {
 }
 
 const createTodo = (body: CreateTodoRequest, token: string) => {
-  const s3BucketName = process.env.S3_BUCKET_NAME
+  const s3BucketName = process.env.ATTACHMENT_S3_BUCKET
   const todoId = uuidv4()
   const userId = parseUserId(token)
 

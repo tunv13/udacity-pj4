@@ -3,7 +3,7 @@ import * as AWS from 'aws-sdk'
 import { Types } from 'aws-sdk/clients/s3'
 // const XAWS = AWSXRay.captureAWS(AWS)
 const s3Client: Types = new AWS.S3({ signatureVersion: 'v4' })
-const s3BucketName = process.env.S3_BUCKET_NAME
+const s3BucketName = process.env.ATTACHMENT_S3_BUCKET
 
 
 const generateUploadUrl = async (todoId: string) =>{
