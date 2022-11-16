@@ -1,11 +1,11 @@
 import TodosAccess from './todosAcess'
 import { generateUploadUrl as generateUploadUrlAttachmentUtils } from './attachmentUtils'
-import { TodoItem } from '../models/TodoItem'
+// import { TodoItem } from '../models/TodoItem'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
-import { createLogger } from '../utils/logger'
-import * as uuid from 'uuid'
-import * as createError from 'http-errors'
+// import { createLogger } from '../utils/logger'
+// import * as uuid from 'uuid'
+// import * as createError from 'http-errors'
 import { parseUserId } from '../auth/utils'
 const uuidv4 = require('uuid/v4')
 
