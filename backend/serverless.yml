@@ -21,6 +21,41 @@ provider:
     lambda: true
     apiGateway: true
 
+custom:
+  documentation:
+    api:
+      info:
+        version: '1.0.0'
+        title: serverless-api
+        description: serverless-api
+    models:
+      - name: AddRequest
+        contentType: "application/json"
+        schema:
+          required:
+            - name
+            - dueDate
+          properties:
+            name:
+              minLength: 1
+              type: string
+            dueDate:
+              type: string
+      - name: UpdateRequest
+        contentType: "application/json"
+        schema:
+          required:
+            - name
+            - dueDate
+            - done
+          properties:
+            name:
+              minLength: 1
+              type: string
+            dueDate:
+              type: string
+            done:
+              type: boolean  
   # Use these variables in the functions and resouorces section below. For example, 
   # ${self:provider.environment.ATTACHMENT_S3_BUCKET}
   environment:
@@ -85,9 +120,10 @@ functions:
           method: post
           path: todos
           cors: true
-          request:
-            schemas:
-              application/json: ${file(models/create-todo-model.json)}
+          documentation:
+            summary: "add todo"
+            requestModels:
+              "application/json": AddRequest
           reqValidatorName: RequestBodyValidator    
     iamRoleStatements:
       - Effect: Allow
@@ -109,9 +145,10 @@ functions:
           method: put
           path: todos/{todoId}
           cors: true
-          request:
-            schema:
-              application/json: ${file(src/requests/update-todo-request.json)}
+          documentation:
+            summary: "update todo"
+            requestModels:
+              "application/json": UpdateRequest
           reqValidatorName: RequestBodyValidator
     iamRoleStatements:
       - Effect: Allow
@@ -182,7 +219,7 @@ resources:
           Ref: ApiGatewayRestApi
         ValidateRequestBody: true
         ValidateRequestParameters: false
-        
+
     GatewayResponseDefault4XX:
       Type: AWS::ApiGateway::GatewayResponse
       Properties:
