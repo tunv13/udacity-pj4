@@ -21,6 +21,27 @@ provider:
     lambda: true
     apiGateway: true
 
+  # Use these variables in the functions and resouorces section below. For example, 
+  # ${self:provider.environment.ATTACHMENT_S3_BUCKET}
+  environment:
+    TODOS_TABLE: Todos-${self:provider.stage}
+    TODOS_CREATED_AT_INDEX: CreatedAtIndex
+    ATTACHMENT_S3_BUCKET: udacity-pj4-tunv-serverless-todo-images
+    SIGNED_URL_EXPIRATION: 300
+    TODOS_USER_INDEX: TodosUserIndex
+  logs:
+    # Enable API Gateway logs
+    restApi: true
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - xray:PutTelemetryRecords
+            - xray:PutTraceSegments
+          Resource: "*"
+
 custom:
   documentation:
     api:
@@ -56,27 +77,6 @@ custom:
               type: string
             done:
               type: boolean  
-  # Use these variables in the functions and resouorces section below. For example, 
-  # ${self:provider.environment.ATTACHMENT_S3_BUCKET}
-  environment:
-    TODOS_TABLE: Todos-${self:provider.stage}
-    TODOS_CREATED_AT_INDEX: CreatedAtIndex
-    ATTACHMENT_S3_BUCKET: udacity-pj4-tunv-serverless-todo-images
-    SIGNED_URL_EXPIRATION: 300
-    TODOS_USER_INDEX: TodosUserIndex
-  logs:
-    # Enable API Gateway logs
-    restApi: true
-
-  iam:
-    role:
-      statements:
-        - Effect: Allow
-          Action:
-            - xray:PutTelemetryRecords
-            - xray:PutTraceSegments
-          Resource: "*"
-
 
 functions:
 
