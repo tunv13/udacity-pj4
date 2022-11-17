@@ -1,22 +1,25 @@
 import * as AWS from 'aws-sdk'
 // import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
-// import { createLogger } from '../utils/logger'
+import { createLogger } from '../utils/logger'
 import { TodoItem } from '../models/TodoItem'
 import { TodoUpdate } from '../models/TodoUpdate'
 
 // const XAWS = AWSXRay.captureAWS(AWS)
 
-// const logger = createLogger('TodosAccess')
+const logger = createLogger('TodosAccess')
 
 // TODO: Implement the dataLayer logic
 class TodoAccess {
+ 
   dynamoClient: DocumentClient = new AWS.DynamoDB.DocumentClient()
   
   todoTable = process.env.TODOS_TABLE
 
   async create(body: TodoItem) {
     try {
+      logger.info('Create todo: ' + JSON.stringify(body));
+
       const params = {
         TableName: this.todoTable,
         Item: body
@@ -29,6 +32,7 @@ class TodoAccess {
   }
 
   async getAll(userId: string) {
+    logger.info('getAll userID: ' + JSON.stringify(userId));
     const params = {
       TableName: this.todoTable,
       KeyConditionExpression: '#userId = :userId',
@@ -46,6 +50,7 @@ class TodoAccess {
   }
 
   async update(body: TodoUpdate, todoId: string, userId: string) {
+    logger.info('update : ' + JSON.stringify(body));
     const params = {
       TableName: this.todoTable,
       Key: {
