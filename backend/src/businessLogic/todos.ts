@@ -1,5 +1,5 @@
 import TodosAccess from './todosAcess'
-import { generateUploadUrl as generateUploadUrlAttachmentUtils } from './attachmentUtils'
+import { generateUploadUrl as generateUploadUrlAttachmentUtils } from '../dataLayer/attachmentUtils'
 
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
