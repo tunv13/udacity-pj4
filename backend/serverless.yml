@@ -33,14 +33,14 @@ provider:
     # Enable API Gateway logs
     restApi: true
 
-  iam:
-    role:
-      statements:
-        - Effect: Allow
-          Action:
-            - xray:PutTelemetryRecords
-            - xray:PutTraceSegments
-          Resource: "*"
+  # iam:
+  #   role:
+  #     statements:
+  #       - Effect: Allow
+  #         Action:
+  #           - xray:PutTelemetryRecords
+  #           - xray:PutTraceSegments
+  #         Resource: "*"
 
 custom:
   documentation:
@@ -98,6 +98,7 @@ functions:
           method: get
           path: todos
           cors: true
+          authorizer: Auth
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -120,6 +121,7 @@ functions:
           method: post
           path: todos
           cors: true
+          authorizer: Auth
           documentation:
             summary: "add todo"
             requestModels:
@@ -145,6 +147,7 @@ functions:
           method: put
           path: todos/{todoId}
           cors: true
+          authorizer: Auth
           documentation:
             summary: "update todo"
             requestModels:
@@ -170,6 +173,7 @@ functions:
           method: delete
           path: todos/{todoId}
           cors: true
+          authorizer: Auth
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -190,6 +194,7 @@ functions:
           method: post
           path: todos/{todoId}/attachment
           cors: true
+          authorizer: Auth
     iamRoleStatements:
       - Effect: Allow
         Action:
