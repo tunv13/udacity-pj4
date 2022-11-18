@@ -41,7 +41,9 @@ const deleteToDo = (todoId: string, jwtToken: string) => {
   return TodosAccess.delete(todoId, userId)
 }
 
-const generateUploadUrl = (todoId: string) => {
-  return generateUploadUrlAttachmentUtils(todoId)
+const generateUploadUrl = (todoId: string, token: string) => {
+  const userId = parseUserId(token)
+
+  return generateUploadUrlAttachmentUtils(todoId,userId)
 }
 export { createTodo, getTodo, updateTodo, deleteToDo, generateUploadUrl }

@@ -9,9 +9,10 @@ import { generateUploadUrl } from '../../businessLogic/todos'
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
+    const token = event.headers.Authorization?.split(' ')[1]
     // TODO: Return a presigned URL to upload a file for a TODO item with the provided id
-    
-    const URL = await generateUploadUrl(todoId);
+
+    const URL = await generateUploadUrl(todoId, token)
     return {
       statusCode: 200,
       headers: {
@@ -19,16 +20,14 @@ export const handler = middy(
         'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({
-          uploadUrl: URL,
+        uploadUrl: URL
       })
-  };
+    }
   }
 )
 
-handler
-  .use(httpErrorHandler())
-  .use(
-    cors({
-      credentials: true
-    })
-  )
+handler.use(httpErrorHandler()).use(
+  cors({
+    credentials: true
+  })
+)

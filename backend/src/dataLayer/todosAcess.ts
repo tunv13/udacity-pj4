@@ -47,6 +47,20 @@ class TodoAccess {
     return Items
   }
 
+  async updateTodoAttachment(todoId: string, userId: string, attachmentUrl: string): Promise<void> {
+    await this.dynamoClient.update({
+      TableName: this.todoTable,
+      Key: {
+        todoId,
+        userId
+      },
+      UpdateExpression: 'SET attachmentUrl = :attachment',
+      ExpressionAttributeValues: {
+        ':attachment': attachmentUrl
+      }
+    }).promise()
+  }
+
   async update(body: TodoUpdate, todoId: string, userId: string) {
     logger.info('update : ' + JSON.stringify(body));
     const params = {
@@ -55,12 +69,11 @@ class TodoAccess {
         userId: userId,
         todoId: todoId
       },
-      UpdateExpression: 'set #a = :a, #b = :b, #c = :c, #d = :d',
+      UpdateExpression: 'set #a = :a, #b = :b, #c = :c',
       ExpressionAttributeNames: {
         '#a': 'name',
         '#b': 'dueDate',
-        '#c': 'done',
-        '#d': 'attachmentUrl'
+        '#c': 'done'
       },
       ExpressionAttributeValues: {
         ':a': body['name'],
