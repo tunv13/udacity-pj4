@@ -79,7 +79,6 @@ class TodoAccess {
         ':a': body['name'],
         ':b': body['dueDate'],
         ':c': body['done'],
-        ':d': body['attachmentUrl']
       },
       ReturnValues: 'ALL_NEW'
     }

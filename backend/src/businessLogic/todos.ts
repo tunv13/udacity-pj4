@@ -12,13 +12,8 @@ const getTodo = (token: string) => {
 }
 
 const updateTodo = (body: UpdateTodoRequest, id: string, token: string) => {
-  const s3BucketName = process.env.ATTACHMENT_S3_BUCKET
   const userId = parseUserId(token)
-  const data = {
-    ...body,
-    attachmentUrl: `https://${s3BucketName}.s3.amazonaws.com/${id}`
-  }
-  return TodosAccess.update(data, id, userId)
+  return TodosAccess.update(body, id, userId)
 }
 
 const createTodo = (body: CreateTodoRequest, token: string) => {
