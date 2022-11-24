@@ -69,16 +69,18 @@ class TodoAccess {
         userId: userId,
         todoId: todoId
       },
-      UpdateExpression: 'set #a = :a, #b = :b, #c = :c',
+      UpdateExpression: 'set #a = :a, #b = :b, #c = :c, #d = :d',
       ExpressionAttributeNames: {
         '#a': 'name',
         '#b': 'dueDate',
-        '#c': 'done'
+        '#c': 'done',
+        '#d': 'progress'
       },
       ExpressionAttributeValues: {
         ':a': body['name'],
         ':b': body['dueDate'],
         ':c': body['done'],
+        ':d': body['progress']
       },
       ReturnValues: 'ALL_NEW'
     }

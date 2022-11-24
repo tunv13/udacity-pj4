@@ -21,6 +21,7 @@ interface EditTodoProps {
 interface EditTodoState {
   file: any
   uploadState: UploadState
+  progress: number
 }
 
 export class EditTodo extends React.PureComponent<
@@ -28,6 +29,7 @@ export class EditTodo extends React.PureComponent<
   EditTodoState
 > {
   state: EditTodoState = {
+    progress: 0,
     file: undefined,
     uploadState: UploadState.NoUpload
   }
@@ -73,12 +75,18 @@ export class EditTodo extends React.PureComponent<
       uploadState
     })
   }
-
+  handleChangeProgress = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(e.target.value)
+    if (Number.isNaN(value)) return
+    
+    this.setState({
+      progress: value <= 100 ? value : 100
+    })
+  }
   render() {
     return (
       <div>
         <h1>Upload new image</h1>
-
         <Form onSubmit={this.handleSubmit}>
           <Form.Field>
             <label>File</label>
@@ -92,6 +100,13 @@ export class EditTodo extends React.PureComponent<
 
           {this.renderButton()}
         </Form>
+        Update progress of Todo (%):
+        <input
+          type="text"
+          value={this.state.progress}
+          onChange={this.handleChangeProgress}
+        />
+        <button>Save progress</button>
       </div>
     )
   }

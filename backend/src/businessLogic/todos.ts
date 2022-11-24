@@ -24,6 +24,7 @@ const createTodo = (body: CreateTodoRequest, token: string) => {
   return TodosAccess.create({
     userId,
     todoId,
+    progress:'0',
     attachmentUrl: null,
     createdAt: new Date().getTime().toString(),
     done: false,

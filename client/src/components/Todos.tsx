@@ -4,6 +4,7 @@ import update from 'immutability-helper'
 import * as React from 'react'
 import {
   Button,
+  Progress,
   Checkbox,
   Divider,
   Grid,
@@ -92,6 +93,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
 
   async componentDidMount() {
     try {
+      console.log(this.props.auth.getIdToken())
       const todos = await getTodos(this.props.auth.getIdToken())
       this.setState({
         todos,
@@ -196,6 +198,9 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
               {todo.attachmentUrl && (
                 <Image src={todo.attachmentUrl} size="small" wrapped />
               )}
+               <Grid.Column width={16}>
+               Progess: {todo.progress ?? 0}%  <Progress percent={todo.progress ?? 0} indicating />
+              </Grid.Column>
               <Grid.Column width={16}>
                 <Divider />
               </Grid.Column>

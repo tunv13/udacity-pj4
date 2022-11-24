@@ -69,6 +69,7 @@ custom:
             - name
             - dueDate
             - done
+            - progress
           properties:
             name:
               minLength: 1
@@ -76,7 +77,9 @@ custom:
             dueDate:
               type: string
             done:
-              type: boolean  
+              type: boolean 
+            progress:
+              type: string 
 
 functions:
 
@@ -245,6 +248,8 @@ resources:
           - AttributeName: todoId
             AttributeType: S
           - AttributeName: dueDate
+            AttributeType: S
+          - AttributeName: progress
             AttributeType: S
         KeySchema:
           - AttributeName: userId
