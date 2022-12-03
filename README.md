@@ -14,6 +14,7 @@ The application should store TODO items, and each TODO item contains the followi
 * `createdAt` (string) - date and time when an item was created
 * `name` (string) - name of a TODO item (e.g. "Change a light bulb")
 * `dueDate` (string) - date and time by which an item should be completed
+* `progress` (string) - progress for tracking progress to finish ToDo
 * `done` (boolean) - true if an item was completed, false otherwise
 * `attachmentUrl` (string) (optional) - a URL pointing to an image attached to a TODO item
 
@@ -59,7 +60,8 @@ It should return data that looks like this:
       "name": "Buy milk",
       "dueDate": "2019-07-29T20:01:45.424Z",
       "done": false,
-      "attachmentUrl": "http://example.com/image.png"
+      "attachmentUrl": "http://example.com/image.png",
+      "progress":"10"
     },
     {
       "todoId": "456",
@@ -67,7 +69,8 @@ It should return data that looks like this:
       "name": "Send a letter",
       "dueDate": "2019-07-29T20:01:45.424Z",
       "done": true,
-      "attachmentUrl": "http://example.com/image.png"
+      "attachmentUrl": "http://example.com/image.png",
+      "progress":"10"
     },
   ]
 }
@@ -97,7 +100,8 @@ It should return a new TODO item that looks like this:
     "name": "Buy milk",
     "dueDate": "2019-07-29T20:01:45.424Z",
     "done": false,
-    "attachmentUrl": "http://example.com/image.png"
+    "attachmentUrl": "http://example.com/image.png",
+    "progress":"0"
   }
 }
 ```
@@ -110,7 +114,8 @@ It receives an object that contains three fields that can be updated in a TODO i
 {
   "name": "Buy bread",
   "dueDate": "2019-07-29T20:01:45.424Z",
-  "done": true
+  "done": true,
+  "progress":"10"
 }
 ```
 
