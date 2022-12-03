@@ -41,13 +41,20 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     this.setState({ newTodoName: event.target.value })
   }
 
-  onEditButtonClick = (todoId: string) => {
-    this.props.history.push(`/todos/${todoId}/edit`)
+  onEditButtonClick = (todo: Todo) => {
+    const todoSelect = {
+      name: todo.name,
+      dueDate: todo.dueDate,
+      done: todo.done,
+      progress: todo.progress
+    }
+    localStorage.setItem('todoSelect', JSON.stringify(todoSelect))
+    this.props.history.push(`/todos/${todo.todoId}/edit`)
   }
 
   onTodoCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
     try {
-      if(!this.state.newTodoName.trim()) return alert('Todo name is empty')
+      if (!this.state.newTodoName.trim()) return alert('Todo name is empty')
       const dueDate = this.calculateDueDate()
       const newTodo = await createTodo(this.props.auth.getIdToken(), {
         name: this.state.newTodoName,
@@ -66,7 +73,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     try {
       await deleteTodo(this.props.auth.getIdToken(), todoId)
       this.setState({
-        todos: this.state.todos.filter(todo => todo.todoId !== todoId)
+        todos: this.state.todos.filter((todo) => todo.todoId !== todoId)
       })
     } catch {
       alert('Todo deletion failed')
@@ -181,7 +188,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
                 <Button
                   icon
                   color="blue"
-                  onClick={() => this.onEditButtonClick(todo.todoId)}
+                  onClick={() => this.onEditButtonClick(todo)}
                 >
                   <Icon name="pencil" />
                 </Button>
@@ -198,8 +205,9 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
               {todo.attachmentUrl && (
                 <Image src={todo.attachmentUrl} size="small" wrapped />
               )}
-               <Grid.Column width={16}>
-               Progess: {todo.progress ?? 0}%  <Progress percent={todo.progress ?? 0} indicating />
+              <Grid.Column width={16}>
+                Progess: {todo.progress ?? 0}%{' '}
+                <Progress percent={todo.progress ?? 0} indicating />
               </Grid.Column>
               <Grid.Column width={16}>
                 <Divider />

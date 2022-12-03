@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { Form, Button } from 'semantic-ui-react'
 import Auth from '../auth/Auth'
-import { getUploadUrl, uploadFile } from '../api/todos-api'
+import { getUploadUrl, patchTodo, uploadFile } from '../api/todos-api'
+import { Todo } from '../types/Todo'
 
 enum UploadState {
   NoUpload,
@@ -32,6 +33,12 @@ export class EditTodo extends React.PureComponent<
     progress: 0,
     file: undefined,
     uploadState: UploadState.NoUpload
+  }
+
+  componentDidMount(): void {
+    const progress: number = Number(JSON.parse(localStorage.getItem('todoSelect') ?? '{progress:"0"}').progress)
+    console.log(progress)
+    this.setState({progress})
   }
 
   handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,11 +85,28 @@ export class EditTodo extends React.PureComponent<
   handleChangeProgress = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value)
     if (Number.isNaN(value)) return
-    
+
     this.setState({
       progress: value <= 100 ? value : 100
     })
   }
+
+  handleSaveProgress = async () => {
+    const body: Todo = JSON.parse(localStorage.getItem('todoSelect') ?? '')
+
+    body.progress = this.state.progress.toString()
+   try {
+    await patchTodo(
+      this.props.auth.getIdToken(),
+      this.props.match.params.todoId,
+      body
+    )
+    alert('Update successful')
+   } catch (error) {
+    alert('Error update')
+   }
+  }
+
   render() {
     return (
       <div>
@@ -106,7 +130,7 @@ export class EditTodo extends React.PureComponent<
           value={this.state.progress}
           onChange={this.handleChangeProgress}
         />
-        <button>Save progress</button>
+        <Button onClick={this.handleSaveProgress}>Save progress</Button>
       </div>
     )
   }
