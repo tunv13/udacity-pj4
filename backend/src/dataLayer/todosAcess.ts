@@ -4,15 +4,21 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { createLogger } from '../utils/logger'
 import { TodoItem } from '../models/TodoItem'
 import { TodoUpdate } from '../models/TodoUpdate'
+import * as AWSXRay from 'aws-xray-sdk'
 
 const logger = createLogger('TodosAccess')
 
-// TODO: Implement the dataLayer logic
+// Xray
 class TodoAccess {
-  dynamoClient: DocumentClient = new AWS.DynamoDB.DocumentClient()
- 
-  todoTable = process.env.TODOS_TABLE
 
+  dynamoClient: DocumentClient = new AWS.DynamoDB.DocumentClient({
+    service: new AWS.DynamoDB()
+  })
+
+  todoTable = process.env.TODOS_TABLE
+  constructor() {
+    AWSXRay.captureAWSClient((this.dynamoClient as any).service);
+  }
   async create(body: TodoItem) {
     try {
       logger.info('Create todo: ' + JSON.stringify(body));
